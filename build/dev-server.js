@@ -1,4 +1,5 @@
 require('./check-versions')()
+var fs = reuqire('fs');
 
 var config = require('../config')
 if (!process.env.NODE_ENV) {
@@ -21,6 +22,41 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var compiler = webpack(webpackConfig)
+var app = express()//启动 express获取app对象
+
+var appData = require('../data.json');
+console.log("获取本地数据");
+var apiRoutes = express.Router();
+
+apiRoutes.get('/goods',function(req,res){
+  res.json({
+    status:200,
+    data:appData.goods
+  })
+});
+apiRoutes.get('/ratings',function(req,res){
+  res.json({
+    status:200,
+    data:appData.ratings
+  })
+});
+apiRoutes.get('/seller',function(req,res){
+  res.json({
+    status:200,
+    data:appData.seller
+  })
+});
+// apiRoutes.route('/:apiName').all(function(req,res){
+//   fs.readFile('../data.json','utf-8',function(err,data){
+//     if(err) throw err;
+//     if(data[req.params.apiName]){
+//       res.json(data[req.params.apiName])
+//     }else{
+//       res.send('no such api name')
+//     }
+//   })
+// });
+app.use('/api',apiRoutes);
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
@@ -69,29 +105,7 @@ var readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
-var appData = require('../data.json');
-var apiRoutes = express.Router();
-apiRoutes.get('/goods',function(req,res){
-  res.json({
-    status:200,
-    data:appData.goods
-  })
-});
-apiRoutes.get('/ratings',function(req,res){
-  res.json({
-    status:200,
-    data:appData.ratings
-  })
-});
-apiRoutes.get('/seller',function(req,res){
-  res.json({
-    status:200,
-    data:appData.seller
-  })
-});
-app.use('/api',apiRoutes);
-
-console.log('> Starting dev server...')
+console.log('> Starting dev server...***********************')
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
   // when env is testing, don't need open it

@@ -6,19 +6,7 @@
 
 <script>
 export default {
-  name: 'app',
-  created: function () { // 实例已经创建完成之后被调用
-    this.$http.get('/api/goods').then(function (response) {
-      // 成功回调
-      response = response.body
-      if (response.status === 200) {
-        this.seller = response.data // this  vue实例
-      }
-    }, function () {
-      // 失败回调
-
-    })
-  }
+  name: 'app'
 }
 </script>
 
@@ -28,5 +16,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
+    font-size:0.28rem;
   }
 </style>
