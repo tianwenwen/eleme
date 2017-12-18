@@ -19,10 +19,22 @@ body,html{
   }
 }
 .clearfix{
-  position:relative;
+  display: block;
   &:after{
-    content:"";
+    content:".";
     display:block;
     clear:both;
+    height:0;
+    line-height:0;
+    visibility: hidden;
   }
+}
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+ul,li,h1,h2,h3,h4,h5,h6{
+  margin:0;
+  padding:0;
 }

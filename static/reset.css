@@ -4,3 +4,6 @@ a{
   -webkit-backface-visibility: hidden;
 }
 
+li{
+  list-style-type: none;
+}

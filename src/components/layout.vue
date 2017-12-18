@@ -4,7 +4,7 @@
       <div class="tab border-1px">
         <div class="tab-item">
           <!--<router-link to="/goods" tag="li">商品</router-link>-->
-          <router-link :to="{name:'goods'}">商品</router-link>
+          <router-link :to="{name:'goods'}" :seller="seller">商品</router-link>
           <!--<a href="/goods">商品</a>-->
         </div>
         <div class="tab-item">
@@ -15,13 +15,10 @@
 
         </div>
       </div>
-      <div class="main">
+      <div class="main clearfix">
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
-      </div>
-      <div class="footer">
-        我是尾部
       </div>
   </div>
 </template>
@@ -33,14 +30,18 @@ export default {
   data() {
     return {
       seller:{
-        notice:"商家活动在即，快快戳！",
+        notice:"商家活动在商家活动在即商家活动在即商家活动在即商家活动在即商家活动在即商家活动在即商家活动在即商家活动在即即，快快戳！",
         img:"",
-        name:"fenxing",
+        name:"fenxing(上地店)",
         description:"zhuansong",
-        per:"30"
+        per:"30",
+        address:"海淀区上地",
+        id:"1234567890",
+        score:4.2
       },
       goods:{},
-      ratings:{}
+      ratings:{},
+      isShowBullentin:false
     }
   },
   created() { // 实例已经创建完成之后被调用
@@ -57,6 +58,9 @@ export default {
   },
   components:{
     vHeader:Header
+  },
+  methods:{
+
   }
 }
 </script>
