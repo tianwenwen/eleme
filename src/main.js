@@ -18,5 +18,10 @@ new Vue({
   components: { App }
 })
 
-var w = window.innerWidth;
-document.getElementsByTagName('html')[0].style.fontSize = (w/750*100)+"px";
+
+function computedSize(){
+  var w = window.innerWidth;
+  document.getElementsByTagName('html')[0].style.fontSize = (w/750*100)+"px";
+}
+computedSize();
+window.onresize = computedSize;

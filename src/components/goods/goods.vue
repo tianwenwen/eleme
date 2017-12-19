@@ -1,16 +1,17 @@
 <template>
     <div class="goods clearfix">
-      <div class="menu-wrapper">
+      <div class="menu-wrapper" ref="menuWrapper">
           <ul>
-            <li v-for="(item,index) in goods" class="menu-item" @click="changeIndex(index)">
+            <li v-for="(item,index) in goods" class="menu-item"  :class="{'active':currentIndex === index}"
+                @click="changeIndex(index,$event)">
               <span class="text">
                 <span v-show="item.type<0">R</span>{{item.name}}</span>
             </li>
           </ul>
       </div>
-      <div class="foods-wrapper">
+      <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
-          <li v-for="item in goods" class="food-list">
+          <li v-for="item in goods" class="food-list food-list-hook">
             <h1 class="title">{{item.name}}</h1>
             <ul>
               <li v-for="food in item.foods" class="food-item">
@@ -32,9 +33,12 @@
           </li>
         </ul>
       </div>
+      <show-cart :data="carData"></show-cart>
     </div>
 </template>
 <script>
+  import BScroll from 'better-scroll';
+  import SHOWCART from '@/components/shopcart/shopcart'
     export default {
       props: {
         seller: {
@@ -43,7 +47,11 @@
       },
       data:function(){
         return{
-          currentIndex:0,
+          carData:{
+            price:12
+          },
+          listHeight:[],
+          scrollY:0,
           goods:[
             {
               "name":"热销榜",
@@ -1362,11 +1370,64 @@
           ]
         }
       },
+      components:{
+        showCart:SHOWCART
+      },
+      mounted:function(){
+        this.$nextTick(function(){
+          this._initScroll();
+          this._calculateHeight();
+        })
+
+      },
+      computed:{
+        currentIndex(){
+          for(let i = 0; i < this.listHeight.length; i++){
+            let height =  this.listHeight[i];
+            let height2 = this.listHeight[i+1];
+            if(!height2 || (this.scrollY >=height && this.scrollY <height2)){
+              return i;
+            }
+          }
+          return 0;
+        }
+      },
       methods:{
-        changeIndex:function(index){
-          this.currentIndex = index;
-          console.log(index);
-       }
+        changeIndex(index,event){
+          if(!event._constructed){//浏览器原生false
+            return;
+          }
+          let footList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+          this.foodsScroll.scrollToElement(footList[index],300);
+          this.scrollY = this.listHeight[index];
+;
+        },
+        _initScroll() {
+          var _self = this;
+          this.menuScroll = new BScroll(this.$refs.menuWrapper,{
+            click:true
+          });
+          this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
+            probeType:3
+          })
+          this.foodsScroll.on('scroll',function(pos){
+            _self.scrollY = Math.abs(Math.round(pos.y));
+          })
+        },
+        _calculateHeight() {
+//          listHeight
+
+          let footList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+          let height = 0;
+          this.listHeight.push(height);
+          for(let i =0 ; i < footList.length; i++){
+            let item = footList[i];
+            height += item.clientHeight;
+            this.listHeight.push(height);
+          }
+
+
+        }
       }
     }
 
@@ -1379,6 +1440,7 @@
     bottom:46px;
     display: flex;
     overflow: hidden;
+
   }
   .menu-wrapper{
     width:80px;
@@ -1441,8 +1503,15 @@
     display: table;
     border-bottom:1px solid #FFF;
     padding:0 12px;
-    &.active,&:hover{
+    &.active{
     background:#FFF;
+    position:relative;
+    margin-top:-1px;
+    z-index:10;
+    font-weight: 700;
+    .text{
+      border-bottom: none;
+    }
      }
      &:last-child{
     border-bottom: none;
