@@ -27,18 +27,22 @@
                     <span class="newPrice">￥{{food.price}}</span>
                     <span v-show="food.oldPrice" class="oldPrice">￥{{food.oldPrice}}</span>
                   </div>
+                  <div class="car-wrapper">
+                    <carcontrol :food="food" @carAdd="carAdd"></carcontrol>
+                  </div>
                 </div>
               </li>
             </ul>
           </li>
         </ul>
       </div>
-      <show-cart :data="carData"></show-cart>
+      <show-cart :seller="seller" :selectFoods="selectFoods" ref="shopcar"></show-cart>
     </div>
 </template>
 <script>
   import BScroll from 'better-scroll';
-  import SHOWCART from '@/components/shopcart/shopcart'
+  import Showcar from '@/components/shopcart/shopcart'
+  import Carcontrol from'@/components/carcontrol/carcontrol'
     export default {
       props: {
         seller: {
@@ -47,9 +51,6 @@
       },
       data:function(){
         return{
-          carData:{
-            price:12
-          },
           listHeight:[],
           scrollY:0,
           goods:[
@@ -1371,7 +1372,8 @@
         }
       },
       components:{
-        showCart:SHOWCART
+        showCart:Showcar,
+        carcontrol:Carcontrol
       },
       mounted:function(){
         this.$nextTick(function(){
@@ -1390,6 +1392,17 @@
             }
           }
           return 0;
+        },
+        selectFoods(){
+          let foods = [];
+          for(let i = 0; i <this.goods.length; i++){
+            for(let j = 0 ; j < this.goods[i].foods.length;j++){
+              if(this.goods[i].foods[j].count && this.goods[i].foods[j].count >0){
+                foods.push(this.goods[i].foods[j]);
+              }
+            }
+          }
+          return foods;
         }
       },
       methods:{
@@ -1408,7 +1421,8 @@
             click:true
           });
           this.foodsScroll = new BScroll(this.$refs.foodsWrapper,{
-            probeType:3
+            probeType:3,
+            click:true
           })
           this.foodsScroll.on('scroll',function(pos){
             _self.scrollY = Math.abs(Math.round(pos.y));
@@ -1426,6 +1440,14 @@
             this.listHeight.push(height);
           }
 
+        },
+        carAdd(target){
+          this._drop(target);
+        },
+        _drop(target){
+          this.$nextTick(function(){
+            this.$refs.shopcar.dropBall(target);
+          });
 
         }
       }
@@ -1463,6 +1485,7 @@
       border-bottom:1px solid #CCC;
       display:flex;
       padding-bottom:18px;
+      position:relative;
       &:last-child{
         border-bottom:none;
        }
@@ -1494,6 +1517,11 @@
         }
       }
     }
+  .car-wrapper{
+    position: absolute;
+    right:0;
+    bottom:12px;
+  }
   }
   .menu-item{
     line-height:14px;

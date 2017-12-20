@@ -4,7 +4,7 @@
       <div class="tab border-1px">
         <div class="tab-item">
           <!--<router-link to="/goods" tag="li">商品</router-link>-->
-          <router-link :to="{name:'goods'}" :seller="seller">商品</router-link>
+          <router-link :to="{name:'goods'}">商品</router-link>
           <!--<a href="/goods">商品</a>-->
         </div>
         <div class="tab-item">
@@ -17,7 +17,7 @@
       </div>
       <div class="main clearfix">
         <keep-alive>
-          <router-view></router-view>
+          <router-view :seller="seller"></router-view>
         </keep-alive>
       </div>
   </div>
@@ -37,7 +37,11 @@ export default {
         per:"30",
         address:"海淀区上地",
         id:"1234567890",
-        score:4.2
+        score:4.2,
+        price:12,
+        deliveryTime:"",
+        deliveryPrice:8,
+        minPrice:30,
       },
       goods:{},
       ratings:{},
