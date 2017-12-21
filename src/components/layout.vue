@@ -49,11 +49,11 @@ export default {
     }
   },
   created() { // 实例已经创建完成之后被调用
-    this.$http.get('/api/goods').then(function (response) {
+    this.$http.get('/api/seller').then(function (response) {
       // 成功回调
       response = response.body
       if (response.status === 200) {
-        this.goods = response.data // this  vue实例
+        this.seller = response.data // this  vue实例
       }
     }, function () {
       // 失败回调

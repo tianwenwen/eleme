@@ -11,10 +11,10 @@
       </div>
       <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
-          <li v-for="item in goods" class="food-list food-list-hook">
+          <li v-for="item in goods" class="food-list food-list-hook" >
             <h1 class="title">{{item.name}}</h1>
             <ul>
-              <li v-for="food in item.foods" class="food-item">
+              <li v-for="food in item.foods" class="food-item" @click="selectFoodItem(food,$event)">
                 <img src="" alt="">
                 <div class="cont">
                   <span class="name">{{food.name}}</span>
@@ -37,12 +37,14 @@
         </ul>
       </div>
       <show-cart :seller="seller" :selectFoods="selectFoods" ref="shopcar"></show-cart>
+      <food :food="selectFood" ref="detailFood" @carAddd="carAdd"></food>
     </div>
 </template>
 <script>
   import BScroll from 'better-scroll';
   import Showcar from '@/components/shopcart/shopcart'
-  import Carcontrol from'@/components/carcontrol/carcontrol'
+  import Carcontrol from '@/components/carcontrol/carcontrol'
+  import Food from '@/components/food/food'
     export default {
       props: {
         seller: {
@@ -52,6 +54,7 @@
       data:function(){
         return{
           listHeight:[],
+          selectFood:{},
           scrollY:0,
           goods:[
             {
@@ -1373,7 +1376,20 @@
       },
       components:{
         showCart:Showcar,
-        carcontrol:Carcontrol
+        carcontrol:Carcontrol,
+        food:Food
+      },
+      created() { // 实例已经创建完成之后被调用
+        this.$http.get('/api/goods').then(function (response) {
+          // 成功回调
+          response = response.body
+          if (response.status === 200) {
+            this.goods = response.data // this  vue实例
+          }
+        }, function () {
+          // 失败回调
+
+        })
       },
       mounted:function(){
         this.$nextTick(function(){
@@ -1449,6 +1465,13 @@
             this.$refs.shopcar.dropBall(target);
           });
 
+        },
+        selectFoodItem(food,event){
+          if(!event._constructed){
+            return;
+          }
+          this.selectFood = food;
+          this.$refs.detailFood.show(event);
         }
       }
     }

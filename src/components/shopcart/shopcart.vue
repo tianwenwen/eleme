@@ -1,8 +1,8 @@
 <template>
   <div class="shopcart">
     <div class="content">
-      <div class="content-left">
-        <div class="logo-wrapper" @click="totalCount>0 ?showDetail=!showDetail:''">
+      <div class="content-left"  @click="totalCount>0 ?fold=!fold:''">
+        <div class="logo-wrapper">
           <div class="logo" :class="{'active':totalCount>0}">
             <span class="icon-cart" v-show="totalCount>0">{{totalCount}}</span>
           </div>
@@ -14,7 +14,7 @@
           另需配送费￥{{seller.deliveryPrice}}元
         </div>
       </div>
-      <div class="content-right" :class="{'active':totalPrice>=seller.minPrice}">
+      <div class="content-right" :class="{'active':totalPrice>=seller.minPrice}" @click.stop.prevent="pay">
         <div class="pay">
           {{payDesc}}
         </div>
@@ -34,33 +34,38 @@
       <div class="detail-content" v-show="showDetail">
         <div class="list-header clearfix">
           <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
+          <span class="empty" @click="clearShop">清空</span>
         </div>
-        <div class="list-content">
+        <div class="list-content"  ref="listContent">
           <ul>
             <li v-for="food in selectFoods" class="food-item">
               <span class="name">{{food.name}}</span>
               <div class="price">
                 <span>￥{{food.price*food.count}}</span>
-                <div class="car-wrapper">
-                  <carcontrol :food="food"></carcontrol>
-                </div>
+              </div>
+              <div class="car-wrapper">
+                <carcontrol :food="food" @carAdd="carAdd"></carcontrol>
               </div>
             </li>
           </ul>
         </div>
       </div>
     </transition>
+    <transition name="fade">
+      <div class="list-mask" v-show="showDetail" @click="hideList"></div>
+    </transition>
 
   </div>
+
 </template>
 
 <script>
-  import Carcontrol from'@/components/carcontrol/carcontrol'
+  import Carcontrol from'@/components/carcontrol/carcontrol';
+  import BScroll from 'better-scroll';
   export default {
     data: function () {
       return {
-        showDetail:false,
+        fold:false,
         balls:[
           {
           show:false
@@ -115,6 +120,27 @@
         }else{
           return '去结算'
         }
+      },
+      showDetail(){
+        if(!this.totalCount){
+          this.fold= true;
+          return false;
+        }
+        let show = !this.fold;
+        if(show){
+          this.$nextTick(function(){
+            if(!this.scroll){
+              this.scroll = new BScroll(this.$refs.listContent,{
+                click:true
+              })
+            }else{
+              this.scroll.refresh();
+            }
+
+          })
+        }
+        return show;
+
       }
     },
     methods:{
@@ -163,6 +189,24 @@
           ball.show = false;
           el.style.display = 'none';
         }
+      },
+      carAdd(target){
+        this.dropBall(target);
+      },
+      clearShop(){
+        for(let i = this.selectFoods.length-1; i>=0;i--){
+          this.selectFoods[i].count = 0;
+        }
+      },
+      hideList(){
+        this.fold = true;
+      },
+      pay(){
+        if(this.totalPrice < this.seller.minPrice){
+          return;
+        }
+        window.alert(`需要支付${this.totalPrice}元`)
+
       }
     }
   }
@@ -173,9 +217,27 @@
     width: 100%;
     bottom: 0;
     left: 0;
-    z-index: 99;
+    z-index: 999;
     height: 48px;
-
+  .list-mask{
+    content:'';
+    position:fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    z-index:-2;
+    transition: all .5s;
+    background:rgba(7,17,27,.6);
+    &.fade-enter,&.fade-leave-to{
+      opacity: 0;
+      background:rgba(7,17,27,0);
+    }
+    &.fade-enter-to{
+       opacity: 1;
+       background:rgba(7,17,27,0.6);
+     }
+  }
   .content {
     display: flex;
     background: #141d27;
@@ -301,27 +363,27 @@
 
 
   }
-  /*.fold-enter,.fold-leave-to{*/
-    /*transform: translate3d(0,0,0);*/
-  /*}*/
-  /*.fold-enter-active{*/
-    /*transform:translate3d(0,-100%,0);*/
-  /*}*/
+
+
   .detail-content{
     position: absolute;
     left:0;
-    top:0;
+    bottom:48px;
     width:100%;
     z-index:-1;
     transition:all .5s;
-
-
+    &.fold-enter-to{
+      transform: translate3d(0,0,0);
+    }
+    &.fold-leave-to,&.folder-enter{
+      transform:translate3d(0,100%,0);
+    }
   .list-header{
     height:40px;
     line-height:40px;
     padding:0 18px;
     background:#f3f5f7;
-    border-bottom:2x solid rgba(7,17,27,.1)
+    border-bottom:2px solid rgba(7,17,27,.1);
     .title{
       float: left;
       font-size:14px;
@@ -346,13 +408,26 @@
       position:relative;
       padding:12px 0;
       box-sizing:border-box;
+      text-align: left;
       .name{
+        line-height:24px;
+        font-size:14px;
+        color:rgb(7,17,27);
 
         }
       .price{
-        .car-wrapper{
-
-        }
+        position:absolute;
+        bottom:12px;
+        right:90px;
+        line-height:24px;
+        font-size:14px;
+        font-weight:700;
+        color:rgb(240,20,20);
+      }
+      .car-wrapper{
+        position: absolute;
+        right:0;
+        bottom:6px;
       }
     }
   }

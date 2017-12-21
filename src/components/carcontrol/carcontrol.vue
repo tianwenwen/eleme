@@ -1,13 +1,14 @@
 <template>
     <div class="carcontrol">
-        <span class="car-decrease" v-show="food.count>0" @click="decCar($event)">-</span>
+        <span class="car-decrease" v-show="food.count>0" @click.stop="decCar($event)">-</span>
         <span class="car-count" v-show="food.count>0">{{food.count}}</span>
-        <span class="car-add" @click="addCar($event)">+</span>
+        <span class="car-add" @click.stop="addCar($event)">+</span>
     </div>
 </template>
 
 <script>
-  import Vue from 'vue'
+  import Vue from 'vue';
+
     export default {
 
         data: function () {

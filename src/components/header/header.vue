@@ -86,7 +86,6 @@
     background: #333;
     text-align: center;
     overflow: hidden;
-  }
   .header-bg{
     height: 3.63rem;
     background:#7e8c8d;
@@ -143,53 +142,55 @@
     left:0;
     backdrop-filter:blur(10px);
 
-     &.fade-enter-active, &.fade-leave-active {
-      transition: opacity .5s;
-     }
-     &.fade-enter, &.fade-leave-to {
-      opacity: 0;
-     }
-     &.fade-leave-to{
-       background:rgba(7,17,27,0)
-     }
-     &.fade-enter-to{
-       background:rgba(7,17,27,0.8);
-     }
+  &.fade-enter-active, &.fade-leave-active {
+                          transition: opacity .5s;
+                        }
+  &.fade-enter, &.fade-leave-to {
+                   opacity: 0;
+                 }
+  &.fade-leave-to{
+     background:rgba(7,17,27,0)
+   }
+  &.fade-enter-to{
+     background:rgba(7,17,27,0.8);
+   }
 
-    .wrap{
-      min-height: 100%;
-    }
-    .detail-main{
-      margin-top:64px;
-      padding-bottom:64px;
-      word-wrap:break-word;
-    }
-    .detail-close{
-      position:relative;
-      width: 32px;
-      height: 32px;
-      line-height:32px;
-      border:1px solid red;
-      margin:-64px auto 0 auto;
-      clear:both;
-    }
-    .title{
-      display: flex;
-      width: 80%;
-      margin:28px auto 20px;
-      text-align: center;
-      .line{
-        flex:1;
-        height: 1px;
-        margin-top:8px;
-        border-bottom: 1px solid rgba(225,225,2225,0.2);
-      }
-      .text{
-        padding:0 12px;
-        font-size:14px;
-        font-weight: 700;
-      }
-    }
+  .wrap{
+    min-height: 100%;
   }
+  .detail-main{
+    margin-top:64px;
+    padding-bottom:64px;
+    word-wrap:break-word;
+  }
+  .detail-close{
+    position:relative;
+    width: 32px;
+    height: 32px;
+    line-height:32px;
+    border:1px solid red;
+    margin:-64px auto 0 auto;
+    clear:both;
+  }
+  .title{
+    display: flex;
+    width: 80%;
+    margin:28px auto 20px;
+    text-align: center;
+  .line{
+    flex:1;
+    height: 1px;
+    margin-top:8px;
+    border-bottom: 1px solid rgba(225,225,2225,0.2);
+  }
+  .text{
+    padding:0 12px;
+    font-size:14px;
+    font-weight: 700;
+  }
+  }
+  }
+  }
+
 
 </style>
