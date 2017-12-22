@@ -11,15 +11,6 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api/goods':{
-        target:"http://127.0.0.1:8080/data.json",
-        // pathRewrite: {'^/api' : ''},
-        ignorePath:true,
-        secure: false
-      },
-      '/api/seller':{
-        target:"http://localhost:8081/data.json"
-      }
 
     },
 

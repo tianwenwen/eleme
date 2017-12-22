@@ -13,23 +13,23 @@ var getMessage = {
     RongIMClient.setConnectionStatusListener({
       onChanged : function(status) {
         switch (status) {
-// 链接成功
+          // 链接成功
           case RongIMLib.ConnectionStatus.CONNECTED:
             console.log('***链接成功');
             break;
-// 正在链接
+          // 正在链接
           case RongIMLib.ConnectionStatus.CONNECTING:
             console.log('***正在链接');
             break;
-// 重新链接
+          // 重新链接
           case RongIMLib.ConnectionStatus.DISCONNECTED:
             console.log('***断开连接');
             break;
-// 其他设备登陆
+          // 其他设备登陆
           case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
             console.log('***其他设备登陆');
             break;
-// 网络不可用
+          // 网络不可用
           case RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE:
             console.log('***网络不可用');
             break;
@@ -38,21 +38,11 @@ var getMessage = {
     });
 
     me.connect()
-    // function openInfo (obj) {
-    //   alert(JSON.stringify(obj))
-    // }
-    // // 发送数据   次数ID标识 就相当于  你传给融云的那个标识
-    // function sendInfo (id) {
-    //   var msg = new RongIMLib.TextMessage({
-    //     content: "hello" + id,
-    //     extra: "附加信息" + id
-    //   });
-    // }
     // 消息监听器
     RongIMClient.setOnReceiveMessageListener({
-// 接收到的消息
+      // 接收到的消息
       onReceived: function (message) {
-// 判断消息类型
+        // 判断消息类型
         switch (message.messageType) {
           case RongIMClient.MessageType.TextMessage:
             // 发送的消息内容将会被打印
