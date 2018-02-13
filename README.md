@@ -1,5 +1,6 @@
 # eleme
 
+vue 练习 animation ,组件间通信
 > A Vue.js project
 
 ## Build Setup
