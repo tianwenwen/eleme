@@ -1,5 +1,5 @@
 # eleme
-
+基于vue的仿饿了么，项目旨在练习vue的功能，样式部分只是简单的实现。
 vue 练习 animation ,组件间通信
 > A Vue.js project
 
